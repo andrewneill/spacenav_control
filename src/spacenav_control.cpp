@@ -30,25 +30,7 @@ private:
 
 };
 
-// bool JogRobotClass::moveToPose(geometry_msgs::Pose goalPose, std::string link){
-// 	bool isPlanningSuccess;
-// 	bool isMoveSuccess = false;
-// 	moveit::planning_interface::MoveGroup::Plan my_plan;
-// 	arm.setStartState(*arm.getCurrentState());
-// 	arm.setPoseTarget(goalPose, link);
 
-// 	// call the planner to compute the plan and visualize it
-// 	isPlanningSuccess = arm.plan(my_plan);
-
-// 	/* *****************  FOR DEBUGGING ***************/
-// 	ROS_INFO("Visualizing plan %s", isPlanningSuccess?"":"FAILED");
-
-// 	if(isPlanningSuccess){
-// 		isMoveSuccess = arm.execute(my_plan);
-// 		ros::Duration(0.5).sleep();
-// 	}
-// 	return isPlanningSuccess && isMoveSuccess;
-// }
 
 JogRobotClass::JogRobot():
 linear_(1),
@@ -56,13 +38,22 @@ angular_(2),
 moveit_config_(3)
 {
 	nh_.param("axis_linear", linear_, linear_);
+	nh_.param("axis_linear_x", linear_x_, linear_x_);
+	nh_.param("axis_linear_y", linear_y_, linear_y_);
+	nh_.param("axis_linear_z", linear_z_, linear_z_);
+
 	nh_.param("axis_angular", angular_, angular_);
+	nh_.param("axis_angular_x", angular_x_, angular_x_);
+	nh_.param("axis_angular_y", angular_y_, angular_y_);
+	nh_.param("axis_angular_z", angular_z_, angular_z_);
+
 	nh_.param("scale_angular", a_scale_, a_scale_);
 	nh_.param("scale_linear", l_scale_, l_scale_);
+	
 	nh_.param("movit_config", moviet_config_);
 
 	vel_pub_ = nh_.advertise<industrial::Velocity>("trajectory_msgs/JointTrajectoryPoint", 1); 
-	joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &JogRobot::joyCallback, this);
+	joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("spacenav/joy", 10, &JogRobot::joyCallback, this);
 
 }
 
@@ -95,7 +86,26 @@ int main(int argc, char** argv)
 }
 
 
+// From Jeremy:
+// bool JogRobotClass::moveToPose(geometry_msgs::Pose goalPose, std::string link){
+// 	bool isPlanningSuccess;
+// 	bool isMoveSuccess = false;
+// 	moveit::planning_interface::MoveGroup::Plan my_plan;
+// 	arm.setStartState(*arm.getCurrentState());
+// 	arm.setPoseTarget(goalPose, link);
 
+// 	// call the planner to compute the plan and visualize it
+// 	isPlanningSuccess = arm.plan(my_plan);
+
+// 	/* *****************  FOR DEBUGGING ***************/
+// 	ROS_INFO("Visualizing plan %s", isPlanningSuccess?"":"FAILED");
+
+// 	if(isPlanningSuccess){
+// 		isMoveSuccess = arm.execute(my_plan);
+// 		ros::Duration(0.5).sleep();
+// 	}
+// 	return isPlanningSuccess && isMoveSuccess;
+// }
 
 
 
