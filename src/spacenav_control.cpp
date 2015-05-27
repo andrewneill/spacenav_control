@@ -77,7 +77,7 @@ void JogRobotClass::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 	//industrial::Velocity vel;
 	geometry_msgs::Pose pose = arm.getCurrentPose().cartesianPosition;
 	cartesianPosition.position.x += a_scale_*joy->axes[angular_];
-	cartesianPosition.position.x += l_scale_*joy->axex[linear_];
+	cartesianPosition.position.x += l_scale_*joy->axes[linear_];
 
 	group.setPoseTarget(cartesianPosition);
 	planSuccess = arm.plan(thePlan);
